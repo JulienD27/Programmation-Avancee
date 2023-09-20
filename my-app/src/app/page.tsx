@@ -17,14 +17,25 @@ export default function Home() {
                 ]}
             />
 
-            <SectionContainer>
-                <ProductGridLayout products={categories[0].products}>
-                    {product => (
-                        <ProductCardLayout product={product} button={<Button fullWidth variant="ghost">Ajouter au panier</Button>}/>
-                        )}
 
-                </ProductGridLayout>
+            <SectionContainer>
+                {categories.map(category => (
+                    <div key={category.id}>
+                        <BreadCrumbs items={[
+                            {
+                                label: category.name + ' (' + category.products.length + ')',
+                                url: '#'
+                            }
+                        ]}/>
+                        <ProductGridLayout products={category.products}>
+                            {product => (
+                                <ProductCardLayout product={product} button={<Button fullWidth variant="ghost">Ajouter au panier</Button>} />
+                            )}
+                        </ProductGridLayout>
+                    </div>
+                ))}
             </SectionContainer>
+
         </main>
     )
 }
