@@ -40,5 +40,3 @@ export const ProductFilters = function (props) {
         </Box>
     )
 }
-
-export default ProductFilters;
