@@ -1,5 +1,6 @@
 "use client";
-import ProductFilters from "@/components/product-filters";
+
+import {ProductFilters} from "@/components/product-filters";
 import {PRODUCTS_CATEGORY_DATA} from "tp-kit/data";
 import {BreadCrumbs, SectionContainer} from "tp-kit/components";
 import {ProductGridLayout, ProductCardLayout} from "tp-kit/components/products";
