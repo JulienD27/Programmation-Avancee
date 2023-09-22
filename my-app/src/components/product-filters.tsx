@@ -4,9 +4,12 @@ import {PRODUCTS_CATEGORY_DATA} from "tp-kit/data";
 import React, {useState} from 'react';
 import {TextInput} from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { Checkbox, Group, Box, Button } from '@mantine/core';
+import { Checkbox, Group, Box } from '@mantine/core';
+import {Button} from "tp-kit/components/button";
 import {ProductFiltersResult} from "@/types";
 import {ProductsCategoryData} from "tp-kit/types";
+
+import {filterProducts} from "@/utils/filter-products";
 
 type Props = {
     categories: ProductsCategoryData[];
