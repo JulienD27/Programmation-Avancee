@@ -5,7 +5,7 @@ import React, {useState} from 'react';
 import {TextInput} from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { Checkbox, Group, Box, Button } from '@mantine/core';
-import {ProductFilterResult} from "@/types";
+import {ProductFiltersResult} from "@/types";
 import {ProductsCategoryData} from "tp-kit/types";
 
 type Props = {
