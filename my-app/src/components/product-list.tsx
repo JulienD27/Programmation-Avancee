@@ -9,6 +9,7 @@ import React, {useState, FC, useMemo} from 'react';
 import {filterProducts} from "@/utils/filter-products";
 import {ProductFiltersResult} from "@/types";
 import {ProductsCategoryData} from "tp-kit/types";
+import Link from 'next/link';
 
 type Props = {
     showFilters: boolean,
@@ -30,7 +31,11 @@ export const ProductList: FC<Props> = function ({categories, showFilters}) {
                         <div key={category.id}>
                             <BreadCrumbs items={[
                                 {
-                                    label: category.name + ' (' + category.products.length + ')',
+                                    label: (
+                                        <Link href={`/${category.slug}`} legacyBehavior={true}>
+                                            <a className="link">{category.name}</a>
+                                        </Link>
+                                    ),
                                     url: '#'
                                 }
                             ]}/>
