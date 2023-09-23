@@ -22,9 +22,6 @@ export const ProductList: FC<Props> = function ({categories, showFilters}) {
 
     return (
         <div>
-            {showFilters ? <div>
-                <ProductFilters categories={categories} onChange={values => setFilters(values)}></ProductFilters>
-            </div> : ""}
             <div>
                 <ProductFilters categories={categories} onChange={values => setFilters(values)}/>
 
