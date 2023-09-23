@@ -9,28 +9,34 @@ export function filterProducts(
         return categories;
     }
 
-    if (filters.checkedCategories.length === 0) {
-        if (!filters.keyword) {
-            return categories;
+    const { checkedCategories, keyword } = filters;
+
+    if (checkedCategories.length === 0 && !keyword) {
+        return categories;
+    }
+
+    const cloneCategory = (category: ProductsCategoryData): ProductsCategoryData => {
+        const clonedCategory = { ...category };
+        if (keyword) {
+            clonedCategory.products = category.products.filter((product) =>
+                product.name.toLowerCase().includes(keyword.toLowerCase())
+            );
         }
-        else {
-            const filteredCategories = categories.map(category => ({
-                ...category,
-                products: category.products.filter(products => products.name.includes(filters?.keyword))}));
+        return clonedCategory;
+    };
 
-
-            return filteredCategories.filter(category => category.products.length>0)
-        }
+    let filteredCategories = categories;
+    if (checkedCategories.length > 0) {
+        filteredCategories = filteredCategories.filter((category) =>
+            checkedCategories.includes(category.slug)
+        );
     }
 
-    if (!filters.keyword) {
-        return categories.filter((category) => filters?.checkedCategories.includes(category.slug))
-    }
-    else {
-        const filteredCategories = categories.filter((category) => filters?.checkedCategories.includes(category.slug))
-            .map(category => ({
-                ...category,
-                products: category.products.filter(products => products.name.includes(filters?.keyword))}));
-        return filteredCategories
-    }
+    filteredCategories = filteredCategories.map((category) =>
+        cloneCategory(category)
+    );
+
+    filteredCategories = filteredCategories.filter((category) => category.products.length > 0);
+
+    return filteredCategories;
 };
