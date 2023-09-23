@@ -29,7 +29,7 @@ export const CategoryDetails = function ({params} : NextPageProps<Props>) {
                 <BreadCrumbs
                     items={[
                         {
-                            label: 'Accueil',
+                            label: {category.slug},
                             url: '#'
                         }
                     ]}
