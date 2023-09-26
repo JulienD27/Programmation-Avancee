@@ -1,62 +1,54 @@
 "use client";
-
-import {ProductFilters} from "@/components/product-filters";
-import {PRODUCTS_CATEGORY_DATA} from "tp-kit/data";
-import {BreadCrumbs, SectionContainer} from "tp-kit/components";
-import {ProductGridLayout, ProductCardLayout} from "tp-kit/components/products";
-import {Button} from "tp-kit/components/button";
-import React, {useState, FC, useMemo} from 'react';
-import {filterProducts} from "@/utils/filter-products";
-import {ProductFiltersResult} from "@/types";
-import {ProductsCategoryData} from "tp-kit/types";
-import Link from 'next/link';
+import { FC, memo, useMemo, useState } from "react";
+import { ProductFilters } from "./product-filters";
+import { ProductsCategoryData } from "tp-kit/types";
+import { Button, ProductCardLayout, ProductGridLayout } from "tp-kit/components";
+import { ProductFiltersResult } from "../types";
+import { filterProducts } from "../utils/filter-products";
+import Link from "next/link";
 
 type Props = {
-    showFilters: boolean,
-    categories: ProductsCategoryData[]
-}
+  categories: ProductsCategoryData[];
+  showFilters?: boolean
+};
 
-export const ProductList: FC<Props> = function ({categories, showFilters}) {
+const ProductList: FC<Props> = memo(function ({ categories, showFilters = false }) {
+  const [filters, setFilters] = useState<ProductFiltersResult | undefined>();
+  const filteredCategories = useMemo(() => filterProducts(categories, filters), [filters, categories]);
 
-    const [filters, setFilters] = useState<ProductFiltersResult>({
-        checkedCategories: [],
-        keyword: ""
-    })
+  return (
+    <div className="flex flex-row gap-8">
+      {/* Filters */}
+      {showFilters && <div className="w-full max-w-[270px]">
+        <ProductFilters categories={categories} onChange={setFilters} />
+      </div>}
 
-    const filteredCategories = useMemo(() => filterProducts(categories, filters), [categories, filters]);
+      {/* Grille Produit */}
+      <div className="flex-1 space-y-24">
+        {filteredCategories.map((cat) => (
+          <section key={cat.id}>
+            <h2 className="text-lg font-semibold mb-8 tracking-tight">
+              <Link href={`/${cat.slug}`} className="link">{cat.name} ({cat.products.length})</Link>
+            </h2>
 
-    return (
-        <div className="flex">
-            <div className="flex">
-                <SectionContainer>
-                    {showFilters ? <ProductFilters categories={categories} onChange={values => setFilters(values)}/> : ""}
-                </SectionContainer>
-            </div>
-            <div>
-                <SectionContainer>
-                    {filteredCategories.map(category => (
-                        <div key={category.id}>
-                            <BreadCrumbs items={[
-                                {
-                                    label: (
-                                        <Link href={`/${category.slug}`} legacyBehavior={true}>
-                                            <a className="link">{category.name}</a>
-                                        </Link>
-                                    ),
-                                    url: '#'
-                                }
-                            ]}/>
-                            <ProductGridLayout products={category.products}>
-                                {product => (
-                                    <ProductCardLayout product={product}
-                                                       button={<Button fullWidth variant="ghost">Ajouter au
-                                                           panier</Button>}/>
-                                )}
-                            </ProductGridLayout>
-                        </div>
-                    ))}
-                </SectionContainer>
-            </div>
-        </div>
-    )
-}
+            <ProductGridLayout products={cat.products}>
+              {(product) => (
+                <ProductCardLayout
+                  product={product}
+                  button={
+                    <Button variant="ghost" className="flex-1 !py-4">
+                      Ajouter au panier
+                    </Button>
+                  }
+                />
+              )}
+            </ProductGridLayout>
+          </section>
+        ))}
+      </div>
+    </div>
+  );
+});
+
+ProductList.displayName = "ProductList";
+export { ProductList };
