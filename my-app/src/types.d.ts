@@ -17,3 +17,16 @@ export type NextPageProps<T = Record<string, string>> = {
    */
   searchParams: { [key: string]: string | string[] | undefined }
 };
+
+export type ProductData = {
+
+}
+
+export type ProductLineData = {
+  product: ProductData,
+  qty: int,
+}
+
+export type CartData = {
+    lines: ProductLineData[]
+}
