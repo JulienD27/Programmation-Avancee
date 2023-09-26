@@ -2,6 +2,7 @@
 import { PRODUCTS_CATEGORY_DATA } from "tp-kit/data";
 import { Button, ProductCardLayout, SectionContainer } from "tp-kit/components";
 import {ProductCartLine} from "tp-kit/components/products";
+import {FormattedPrice} from "tp-kit/components/data-display";
 
 const products = PRODUCTS_CATEGORY_DATA[0].products.slice(0, 3);
 
@@ -31,12 +32,14 @@ export default function DevCartPage() {
                         {products.map((product) => (
                             total += product.price,
                                 <ProductCartLine
-                                    key={product.id}
+                                    key={product.id}s
                                     product={product}
+                                    qty = {1}
+                                    onQuantityChange={product.qty ++}
                                 />
                         ))}
                     </div>
-                    <p>Total du panier: ${total}</p>
+                    <p>Total du panier: <FormattedPrice price={total} /></p>
                 <Button onClick={() => alert('Commande passée !')} variant={"primary"} fullWidth>Commander</Button>
                 <Button variant={"outline"} fullWidth>Vider le panier</Button>
             </section>
