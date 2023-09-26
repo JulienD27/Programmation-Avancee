@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import ProductAttributeTable from '@/components/product-attribute-table';
 import { PRODUCTS_CATEGORY_DATA } from 'tp-kit/data';
 import Image from 'next/image';
 import {notFound} from "next/navigation";
@@ -17,9 +18,6 @@ type Props = {
     productSlug: string
 }
 
-function ProductAttributeTable(props: { attributes: ({ rating: number; label: string } | { rating: number; label: string } | { rating: number; label: string } | { rating: number; label: string } | { rating: number; label: string })[] }) {
-    return null;
-}
 
 export default function Home({params}: NextPageProps<Props>) {
     const currentcategories = categories.filter(category => {
@@ -93,10 +91,8 @@ export default function Home({params}: NextPageProps<Props>) {
                             button={<Button variant="ghost">Ajouter au panier</Button>}
                             product={product}
                         />}
-
                 </ProductGridLayout>
             </SectionContainer>
-
         </main>
     )
 }
