@@ -21,7 +21,7 @@ export default function Home() {
             />
             </div>
             <div className="relative">
-                <ProductList categories={categories} />
+                <ProductList categories={categories} showFilters={true}/>
             </div>
         </main>
     )

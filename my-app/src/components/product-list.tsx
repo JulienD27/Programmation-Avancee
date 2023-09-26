@@ -18,14 +18,21 @@ type Props = {
 
 export const ProductList: FC<Props> = function ({categories, showFilters}) {
 
-    const [filters, setFilters] = useState<ProductFiltersResult>()
+    const [filters, setFilters] = useState<ProductFiltersResult>({
+        checkedCategories: [],
+        keyword: ""
+    })
+
     const filteredCategories = useMemo(() => filterProducts(categories, filters), [categories, filters]);
 
     return (
-        <div>
+        <div className="flex">
+            <div className="flex">
+                <SectionContainer>
+                    {showFilters ? <ProductFilters categories={categories} onChange={values => setFilters(values)}/> : ""}
+                </SectionContainer>
+            </div>
             <div>
-                <ProductFilters categories={categories} onChange={values => setFilters(values)}/>
-
                 <SectionContainer>
                     {filteredCategories.map(category => (
                         <div key={category.id}>

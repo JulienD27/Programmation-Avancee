@@ -5,6 +5,7 @@ export function filterProducts(
     categories: ProductsCategoryData[],
     filters?: ProductFiltersResult
 ): ProductsCategoryData[] {
+    console.log(filters)
     if (!filters) {
         return categories;
     }
