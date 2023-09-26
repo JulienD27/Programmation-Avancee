@@ -1,9 +1,12 @@
 "use client";
 import { PRODUCTS_CATEGORY_DATA } from "tp-kit/data";
 import { Button, ProductCardLayout, SectionContainer } from "tp-kit/components";
+import {ProductCartLine} from "tp-kit/components/products";
+
 const products = PRODUCTS_CATEGORY_DATA[0].products.slice(0, 3);
 
 export default function DevCartPage() {
+    let total = 0
     return (
         <SectionContainer
             className="py-36"
@@ -23,7 +26,18 @@ export default function DevCartPage() {
 
             {/* Panier */}
             <section className="w-full lg:w-1/3 space-y-8">
-
+                    <h2>Mon panier</h2>
+                    <div>
+                        {products.map((product) => (
+                            total += product.price,
+                                <ProductCartLine
+                                    key={product.id}
+                                    product={product}
+                                />
+                        ))}
+                    </div>
+                    <p>Total du panier: ${total}</p>
+                <Button onClick={() => alert('Commande passée !')} variant={"primary"} fullWidth>Commander</Button>
                 <Button variant={"outline"} fullWidth>Vider le panier</Button>
             </section>
             {/* /Panier */}
