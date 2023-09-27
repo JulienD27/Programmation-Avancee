@@ -3,15 +3,5 @@
 @tailwind utilities;
 
 .link {
-    @apply transition-colors;
-    @apply text-green-500;
-    cursor: pointer;
-}
-
-.link:hover {
-    @apply text-green-600;
-}
-
-.link:active {
-    @apply text-green-700;
+  @apply transition-colors hover:text-brand active:text-brand-600 cursor-pointer;
 }

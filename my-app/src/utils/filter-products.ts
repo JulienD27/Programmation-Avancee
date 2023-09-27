@@ -1,43 +1,45 @@
-import {ProductsCategoryData} from "tp-kit/types";
-import {ProductFiltersResult} from "../types";
+import { ProductsCategoryData } from "tp-kit/types";
+import { ProductFiltersResult } from "../types";
 
+/**
+ * Filters the product list according to the filters values
+ * 
+ * @param categories 
+ * @param filters 
+ * @returns 
+ */
 export function filterProducts(
-    categories: ProductsCategoryData[],
-    filters?: ProductFiltersResult
+  categories: ProductsCategoryData[],
+  filters?: ProductFiltersResult
 ): ProductsCategoryData[] {
-    console.log(filters)
-    if (!filters) {
-        return categories;
-    }
+  if (!filters) return categories;
 
-    const { checkedCategories, keyword } = filters;
+  // Excludes non-selected categories using their slug
+  let output = categories.filter((cat) => {
+    return filters.categoriesSlugs.length ?? 0 > 0
+      ? filters.categoriesSlugs.includes(cat.slug)
+      : true;
+  });
 
-    if (checkedCategories.length === 0 && !keyword) {
-        return categories;
-    }
+  // Filters products by their name
+  if (filters.search) {
+    output = output.map((cat) => {
+      // Excludes non-matching product names
+      const filteredProducts = cat.products.filter((product) =>
+        product.name.toLocaleLowerCase().includes(filters.search!)
+      );
 
-    const cloneCategory = (category: ProductsCategoryData): ProductsCategoryData => {
-        const clonedCategory = { ...category };
-        if (keyword) {
-            clonedCategory.products = category.products.filter((product) =>
-                product.name.toLowerCase().includes(keyword.toLowerCase())
-            );
-        }
-        return clonedCategory;
-    };
+      // Updates the product category counter 
+      return {
+        ...cat,
+        count: filteredProducts.length,
+        products: filteredProducts,
+      };
+    });
 
-    let filteredCategories = categories;
-    if (checkedCategories.length > 0) {
-        filteredCategories = filteredCategories.filter((category) =>
-            checkedCategories.includes(category.slug)
-        );
-    }
+    // Excludes empty product categories
+    output = output.filter((cat) => cat.products.length > 0);
+  }
 
-    filteredCategories = filteredCategories.map((category) =>
-        cloneCategory(category)
-    );
-
-    filteredCategories = filteredCategories.filter((category) => category.products.length > 0);
-
-    return filteredCategories;
-};
+  return output;
+}
