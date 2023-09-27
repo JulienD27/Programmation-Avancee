@@ -29,9 +29,9 @@ const Cart : FC = memo(function () {
     return (
 
         <section>
-                <h2>Mon panier</h2>
-
-                <div>
+            <b><h1>Mon panier</h1></b>
+                <br/>
+                <div class="content">
                     {lines.map((line) => (
                         <ProductCartLine
                             key={line.id}
@@ -43,10 +43,19 @@ const Cart : FC = memo(function () {
                         />
                     ))}
                 </div>
-                <p>Total du panier: <FormattedPrice price={computeCartTotal(lines)} /></p>
-                <Button onClick={() => alert('Commande passée !')} variant={"primary"} fullWidth>Commander</Button>
-                <Button variant={"outline"} fullWidth onClick={() => clearCart()}>Vider le panier</Button>
+                <br/>
+            <div className="flex justify-between items-center">
 
+                <div className="text-lg font-semibold">Total</div>
+                <div className="text-lg font-semibold">
+                    <FormattedPrice price={lines.reduce((acc, line) => acc + line.product.price * line.qty, 0)}/>
+                </div>
+            </div>
+                <br/>
+            <div>
+                <Button class="cartButton" onClick={() => alert('Commande passée !')} variant={"primary"} fullWidth>Commander</Button>
+                <Button class="cartButton" variant={"outline"} fullWidth onClick={() => clearCart()}>Vider le panier</Button>
+            </div>
         </section>
     );
 });

@@ -5,3 +5,8 @@
 .link {
   @apply transition-colors hover:text-brand active:text-brand-600 cursor-pointer;
 }
+
+.cartButton {
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
