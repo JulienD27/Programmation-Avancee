@@ -5,6 +5,7 @@ import {ProductCartLine} from "tp-kit/components/products";
 import {FormattedPrice} from "tp-kit/components/data-display";
 import {addLine, clearCart, computeCartTotal, removeLine, updateLine, useCart} from "../../hooks/use-cart";
 import {Cart} from "../../components/cart";
+import {CartCounter} from "../../components/cart-counter";
 
 const products = PRODUCTS_CATEGORY_DATA[0].products.slice(0, 3);
 
@@ -12,6 +13,9 @@ const products = PRODUCTS_CATEGORY_DATA[0].products.slice(0, 3);
 export default function DevCartPage() {
     console.log("rendu page");
     return (
-        <Cart></Cart>
+        <div>
+            <CartCounter />
+            <Cart />
+        </div>
     )
 }
