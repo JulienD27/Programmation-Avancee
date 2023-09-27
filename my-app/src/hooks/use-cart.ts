@@ -13,9 +13,9 @@ export function addLine(product: ProductData) {
         const existingLine = state.lines.find((line) => line.product.id === product.id);
 
         if (existingLine) {
-            existingLine.quantity += 1;
+            existingLine.qty += 1;
         } else {
-            state.lines.push({ product, quantity: 1 });
+            state.lines.push({ product, qty: 1 });
         }
         return { lines: [...state.lines] };
     });
@@ -44,7 +44,7 @@ export function clearCart() {
 }
 
 export function computeLineSubTotal(line: ProductLineData): number {
-    return line.product.price * line.quantity;
+    return line.product.price * line.qty;
 }
 
 export function computeCartTotal(lines: ProductLineData[]): number {
