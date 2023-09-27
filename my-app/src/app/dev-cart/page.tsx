@@ -3,10 +3,27 @@ import { PRODUCTS_CATEGORY_DATA } from "tp-kit/data";
 import { Button, ProductCardLayout, SectionContainer } from "tp-kit/components";
 import {ProductCartLine} from "tp-kit/components/products";
 import {FormattedPrice} from "tp-kit/components/data-display";
+import {addLine, clearCart, computeCartTotal, removeLine, useCart} from "../../hooks/use-cart";
 
 const products = PRODUCTS_CATEGORY_DATA[0].products.slice(0, 3);
 
+
 export default function DevCartPage() {
+
+    const lines  = useCart((state) => state.lines)
+
+    const handleQuantityChange = (product, quantity) => {
+        lines.forEach((line) => {
+            if (line.product.id === product.id) {
+                line.quantity = quantity;
+            }
+        })
+    }
+
+    const handleRemove = (product) => {
+        removeLine(product.id)
+    }
+
     let total = 0
     return (
         <SectionContainer
@@ -19,7 +36,7 @@ export default function DevCartPage() {
                     <ProductCardLayout
                         key={product.id}
                         product={product}
-                        button={<Button variant={"ghost"} fullWidth>Ajouter au panier</Button>}
+                        button={<Button variant={"ghost"} fullWidth onClick={() => addLine(product)}>Ajouter au panier</Button>}
                     />
                 ))}
             </section>
@@ -28,20 +45,21 @@ export default function DevCartPage() {
             {/* Panier */}
             <section className="w-full lg:w-1/3 space-y-8">
                     <h2>Mon panier</h2>
+                <pre>{JSON.stringify(lines, null, 2)}</pre>
                     <div>
-                        {products.map((product) => (
-                            total += product.price,
+                        {lines.map((line) => (
                                 <ProductCartLine
-                                    key={product.id}s
-                                    product={product}
-                                    qty = {1}
-                                    onQuantityChange={product.qty ++}
+                                    key={line.product.id}
+                                    product={line.product}
+                                    qty = {line.quantity}
+                                    onQuantityChange={() => {}}
+                                    remove={() => {handleRemove(line.product)}}
                                 />
                         ))}
                     </div>
-                    <p>Total du panier: <FormattedPrice price={total} /></p>
+                    <p>Total du panier: <FormattedPrice price={computeCartTotal(lines)} /></p>
                 <Button onClick={() => alert('Commande passée !')} variant={"primary"} fullWidth>Commander</Button>
-                <Button variant={"outline"} fullWidth>Vider le panier</Button>
+                <Button variant={"outline"} fullWidth onClick={() => clearCart()}>Vider le panier</Button>
             </section>
             {/* /Panier */}
         </SectionContainer>
