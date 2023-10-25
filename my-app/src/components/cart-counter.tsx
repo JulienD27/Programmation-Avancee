@@ -1,16 +1,15 @@
-import React, {FC, memo} from 'react';
-import useCart  from '../hooks/use-cart';
+import { FC, memo } from "react";
+import { useCart } from "../hooks/use-cart";
 
-const CartCounter : FC = memo(function () {
-    const count = useCart((state) => state.count);
-    console.log("rendu counter");
+type Props = {
+}
 
-    return (
-        <div>
-            Nombre de lignes dans le panier : {count}
-        </div>
-    );
+const CartCounter: FC<Props> = memo(function() {
+  console.log("rendu counter");
+
+  const count = useCart(cart => cart.count);
+  return <>{count}</>;
 });
 
 CartCounter.displayName = "CartCounter";
-export { CartCounter };
+export {CartCounter};

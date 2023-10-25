@@ -1,4 +1,3 @@
-"use client"
 import {
   BreadCrumbs,
   Button,
@@ -16,7 +15,7 @@ import {
   ProductAttribute,
   ProductAttributesTable,
 } from "../../../components/product-attributes-table";
-import {addLine} from "../../../hooks/use-cart";
+import { AddToCartButton } from "../../../components/add-to-cart-button";
 const product = {
   ...PRODUCTS_CATEGORY_DATA[0].products[0],
   category: {
@@ -99,7 +98,7 @@ export default async function ProductPage({ params }: NextPageProps<Props>) {
               <p className="!my-0 text-xl">
                 <FormattedPrice price={product.price} />
               </p>
-              <Button variant={"primary"} onClick={() => addLine(product)}>Ajouter au panier</Button>
+              <AddToCartButton variant={"primary"} product={product} fullWidth={false} />
             </div>
           </div>
 
@@ -116,7 +115,6 @@ export default async function ProductPage({ params }: NextPageProps<Props>) {
           </div>
 
           <ProductGridLayout products={product.category.products}>
-
             {(product) => (
               <ProductCardLayout
                 product={product}

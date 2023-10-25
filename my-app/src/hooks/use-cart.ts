@@ -1,59 +1,89 @@
+import { create } from "zustand";
+import { type ProductData } from "tp-kit/types";
+import { type ProductLineData, type CartData } from "../types";
+import { useState } from "react";
+import { wait } from "tp-kit/utils/wait";
 
-import {CartData} from "../types";
-import {ProductData, ProductLineData} from "../types";
-import {create, useStore} from "zustand";
-
-const useCart = create<CartData>(() => ({
-    lines: [],
-    count : 0,
+export const useCart = create<CartData>(() => ({
+  lines: [],
+  count: 0,
 }));
 
-export default useCart;
+/**
+ * Ajoute une nouvelle ligne au panier.
+ * Si le produit est déjà dans le panier, augmente la quantité de 1.
+ *
+ * @param product
+ */
+export const addLine = async (product: ProductData) => {
+  const {lines} = useCart.getState();
 
-// Actions du panier
-export async function addLine(product: ProductData) {
+  // Cherche à récupérer la quantité d'une ligne si déjà présente dans le panier
+  const i = lines.findIndex((l) => l.product.id === product.id);
+  const qty = (lines[i]?.qty ?? 0) + 1;
 
-    useCart.setState((state) => {
-        const existingLine = state.lines.find((line) => line.product.id === product.id);
-        if (existingLine) {
-            existingLine.qty += 1;
-        } else {
-            state.lines.push({ product, qty: 1 });
-            state.count += 1;
-        }
-        return { lines: [...state.lines] };
-    });
+  // Ajoute la nouvelle ligne si elle n'existe pas
+  if (i < 0) {
+    lines.push({ product, qty });
+  }
+  // Modifie la quantité de la ligne existante
+  else {
+    lines[i].qty = qty;
+  }
+
+  await wait(250);
+
+  useCart.setState({ lines: [...lines], count: lines.length });
 }
 
-export function updateLine(line: ProductLineData) {
-    useCart.setState((state) => {
-        const updatedLines = state.lines.map((l) =>
-            l.product.id === line.product.id ? line : l
-        );
-        return { lines: updatedLines };
-    });
-}
+/**
+ * Modifie une ligne produit du panier
+ *
+ * @param line
+ */
+export const updateLine = (line: ProductLineData) =>
+  useCart.setState(({ lines }) => {
+    const i = lines.findIndex((l) => l.product.id === line.product.id);
+    if (i < 0)
+      throw new Error(
+        `Il n'y a pas de ligne dans le panier pour le produit ${line.product.id}`
+      );
 
-export function removeLine(productId: number) {
-    useCart.setState((state) => {
-        state.count -= 1;
-        const filteredLines = state.lines.filter(
-            (line) => line.product.id !== productId
-        );
-        return { lines: filteredLines };
-    });
-}
+    lines[i].qty = line.qty;
 
-export function clearCart() {
-    useCart.setState({ lines: [], count: 0});
-}
+    return { lines: [...lines] };
+  });
 
-export function computeLineSubTotal(line: ProductLineData): number {
-    return line.product.price * line.qty;
-}
+/**
+ * Supprime la ligne produit du panier
+ *
+ * @param productId
+ * @returns
+ */
+export const removeLine = (productId: number) =>
+  useCart.setState(({ lines }) => {
+    const i = lines.findIndex((l) => l.product.id === productId);
+    if (i < 0)
+      throw new Error(
+        `Il n'y a pas de ligne dans le panier pour le produit ${productId}`
+      );
 
-export function computeCartTotal(lines: ProductLineData[]): number {
-    return lines.reduce(
-        (total, line) => total + computeLineSubTotal(line), 0
-    );
+    delete lines[i];
+
+    // Object.values() permet de supprimer les entrées `empty` (si on laisse le delete seul) ou `undefined` (si on avait utilisé [...lines])
+    const updatedLines = Object.values(lines);
+
+    return { lines: updatedLines, count: updatedLines.length };
+  });
+
+/**
+ * Calcul le total du panier 
+ * 
+ * @param lines 
+ * @returns 
+ */
+export const computeCartTotal = (lines: ProductLineData[]): number => {
+  if (lines.length === 0) return 0;
+
+  return lines.map((l) => l.product.price * l.qty).reduce((a, b) => a + b);
 }

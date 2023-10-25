@@ -2,11 +2,11 @@
 import { FC, memo, useMemo, useState } from "react";
 import { ProductFilters } from "./product-filters";
 import { ProductsCategoryData } from "tp-kit/types";
-import { Button, ProductCardLayout, ProductGridLayout } from "tp-kit/components";
+import { ProductCardLayout, ProductGridLayout } from "tp-kit/components";
 import { ProductFiltersResult } from "../types";
 import { filterProducts } from "../utils/filter-products";
 import Link from "next/link";
-import {addLine} from "../hooks/use-cart";
+import { AddToCartButton } from "./add-to-cart-button";
 
 type Props = {
   categories: ProductsCategoryData[];
@@ -36,11 +36,7 @@ const ProductList: FC<Props> = memo(function ({ categories, showFilters = false 
               {(product) => (
                 <ProductCardLayout
                   product={product}
-                  button={
-                    <Button variant="ghost" className="flex-1 !py-4" onClick={() => addLine(product)}>
-                      Ajouter au panier
-                    </Button>
-                  }
+                  button={<AddToCartButton product={product} />}
                 />
               )}
             </ProductGridLayout>

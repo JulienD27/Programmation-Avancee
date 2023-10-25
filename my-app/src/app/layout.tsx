@@ -29,9 +29,9 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <body className={font.className}>
-        <Menu />
-
         <Providers font={font}>
+          <Menu />
+          
           {children}
         </Providers>
 
