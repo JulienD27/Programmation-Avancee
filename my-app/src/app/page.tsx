@@ -3,7 +3,8 @@ import { PRODUCTS_CATEGORY_DATA } from "tp-kit/data";
 import { ProductList } from "../components/product-list";
 import { Metadata } from "next";
 import prisma from "../utils/prisma";
-const categories = await prisma.productCategory.findMany({ include: { products: true } });
+import {getCategories, getCategory} from "../utils/get-category";
+const categories = await getCategories()
 
 export const metadata:Metadata = {
   title: `Page d’accueil - Starbucks`,
