@@ -17,6 +17,7 @@ export default function Page() {
                 router.push('/connexion');
             } else {
                 setUserDetails(user);
+                console.log(user)
             }
         }
 
@@ -30,10 +31,9 @@ export default function Page() {
 
     return (
         <div>
-            <h1>Mon Compte</h1>
             {userDetails && (
                 <SectionContainer>
-                    <h3>Bonjour {userDetails.name}</h3>
+                    <h3>Bonjour Monsieur {userDetails.user_metadata.name}</h3>
                     <Button onClick={handleLogout}>Se déconnecter</Button>
                 </SectionContainer>
             )}
