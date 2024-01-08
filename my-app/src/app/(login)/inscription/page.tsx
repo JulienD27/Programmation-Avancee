@@ -10,14 +10,13 @@ import { createClient } from '@supabase/supabase-js'
 import {createClientComponentClient} from "@supabase/auth-helpers-nextjs";
 import {useRouter} from "next/navigation";
 
-
-
 const schema = z.object({
     name: z.string().min(2, {message: 'Le nom ne doit pas être vide'}),
     email: z.string().email({message: 'Format invalide'}),
     password: z.string().min(6, {message: 'Le mot de passe doit contenir au moins 6 caractères'}),
 });
 
+type FormValues = z.infer<typeof schema>;
 
 const Inscription = () => {
     const router = useRouter()
@@ -40,39 +39,40 @@ const Inscription = () => {
         });
     }
 
-    const form = useForm({
-        validate: zodResolver(schema),
+    const form = useForm<FormValues>({
         initialValues: {
             name: '',
             email: '',
             password: '',
         },
+
+        validate: zodResolver(schema),
     });
 
-    const handleSignUp = async () => {
-        try {
-            const res = await supabase.auth.signUp({
-                email: form.values.email,
-                password: form.values.password,
+    const [created, setCreated] = useState(false);
+    const [isValid, setIsValid] = useState(false);
+    const [message, setMessage] = useState("");
+
+    const handleSignUp = async (values: FormValues) => {
+        console.log(values);
+        const { error } = await supabase.auth.signUp(
+            {
+                email: values.email,
+                password: values.password,
                 options: {
-                    emailRedirectTo: `${location.origin}/auth/callback`,
-                },
-            });
-            const error = res.error;
-            console.log(res);
-            if (error) {
-                addError(res.error.message);
-                console.log('Erreur lors de l\'inscription : ', error)
-            } else {
-                addSuccess();
-                console.log('Inscription réussi')
-                //router.refresh();
+                    emailRedirectTo: 'http://localhost:3000/api/auth/callback',
+                    data: {
+                        name: values.name
+                    }
+                }
             }
-        } catch (error) {
-            console.error('Erreur lors de l\'inscription : ', error);
-            addError(error.message);
-        }
-    };
+        )
+
+        console.log(error)
+        setCreated(true);
+        setMessage((error) ? error.message : "Votre inscription a bien été prise en compte. Validez votre adresse email pour vous connecter")
+        setIsValid((!error))
+    }
 
     return (
         <Layout>
