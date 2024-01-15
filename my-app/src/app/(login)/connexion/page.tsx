@@ -51,6 +51,7 @@ const Connexion = () => {
         });
 
         if (connect.error === null) {
+            router.refresh();
             router.push("/mon-compte");
         } else {
             setNotices(n => [...n, {type: "error", message: "Erreur de connexion"}])
@@ -61,6 +62,7 @@ const Connexion = () => {
         const checkUser = async () => {
             const user = await getUser(supabase)
             if (user) {
+                router.refresh();
                 router.push("/");
             }
         }

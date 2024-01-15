@@ -80,6 +80,7 @@ const Inscription = () => {
         const checkUser = async () => {
             const user = await getUser(supabase)
             if (user) {
+                router.refresh();
                 router.push("/");
             }
         }
