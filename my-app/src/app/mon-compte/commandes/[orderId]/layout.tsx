@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 export default function Layout ({children}: {children: ReactNode}) {
   const router = useRouter();
   const handleClose = useCallback(() => {
+    router.refresh();
     router.replace("/mon-compte");
   }, [router]);
   
