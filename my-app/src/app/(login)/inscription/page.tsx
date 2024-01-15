@@ -5,10 +5,11 @@ import {z} from 'zod';
 import {useForm, zodResolver} from '@mantine/form';
 import {PasswordInput, TextInput, Box, Group} from '@mantine/core';
 import Layout from "../Layout";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import { createClient } from '@supabase/supabase-js'
 import {createClientComponentClient} from "@supabase/auth-helpers-nextjs";
 import {useRouter} from "next/navigation";
+import {getUser} from "../../../utils/supabase";
 
 const schema = z.object({
     name: z.string().min(2, {message: 'Le nom ne doit pas être vide'}),
@@ -70,9 +71,20 @@ const Inscription = () => {
 
         console.log(error)
         setCreated(true);
+        addSuccess();
         setMessage((error) ? error.message : "Votre inscription a bien été prise en compte. Validez votre adresse email pour vous connecter")
         setIsValid((!error))
     }
+
+    useEffect(() => {
+        const checkUser = async () => {
+            const user = await getUser(supabase)
+            if (user) {
+                router.push("/");
+            }
+        }
+        checkUser();
+    });
 
     return (
         <Layout>
@@ -111,7 +123,7 @@ const Inscription = () => {
                         </Button>
                         <Button variant={"outline"} fullWidth variant="ghost"
                                 onClick={() => {
-                                    window.location.href = "/connexion"
+                                    router.push("/connexion");
                                 }}>
                             Déjà un compte ? Se connecter
                         </Button>
