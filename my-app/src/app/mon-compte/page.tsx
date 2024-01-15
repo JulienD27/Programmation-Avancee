@@ -30,13 +30,23 @@ export default function Page() {
     };
 
     return (
-        <div>
-            {userDetails && (
-                <SectionContainer>
-                    <h3>Bonjour Monsieur {userDetails.user_metadata.name}</h3>
-                    <Button onClick={handleLogout}>Se déconnecter</Button>
-                </SectionContainer>
-            )}
-        </div>
+        <SectionContainer>
+            <div className="bg-white rounded-lg p-6 shadow-lg">
+                <h2>MON COMPTE</h2>
+                {userDetails ? (
+                    <>
+                        <br></br>
+                        <p>Bonjour, {userDetails.user_metadata.name} !</p>
+                        <br></br>
+                        <p><span className="font-bold">Nom :</span> {userDetails.user_metadata.name}</p>
+                        <p><span className="font-bold">Email :</span> {userDetails.email}</p>
+                        <br></br>
+                    </>
+                ) : (
+                    <p>Chargement des détails de l'utilisateur...</p>
+                )}
+                <Button onClick={handleLogout}>Se déconnecter</Button>
+            </div>
+        </SectionContainer>
     );
 };
