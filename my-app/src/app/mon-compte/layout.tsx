@@ -1,9 +1,10 @@
-import {ReactNode} from "react";
+import {ReactNode, useEffect} from "react";
 import {Card, SectionContainer} from "tp-kit/components";
 import prisma from "../../utils/prisma";
 import {OrderTable} from "../../components/order-table";
 
 export default async function Layout({children}: { children: ReactNode }) {
+
     const orders = await prisma.order.findMany();
 
     return (
