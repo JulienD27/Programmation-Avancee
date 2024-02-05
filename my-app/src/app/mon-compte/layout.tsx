@@ -1,4 +1,4 @@
-import {ReactNode, useEffect} from "react";
+import {ReactNode} from "react";
 import {Card, SectionContainer} from "tp-kit/components";
 import prisma from "../../utils/prisma";
 import {OrderTable} from "../../components/order-table";

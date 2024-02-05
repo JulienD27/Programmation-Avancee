@@ -51,23 +51,13 @@ const Connexion = () => {
         });
 
         if (connect.error === null) {
+            console.log(connect)
             router.refresh();
-            router.push("/mon-compte");
         } else {
             setNotices(n => [...n, {type: "error", message: "Erreur de connexion"}])
         }
     }
 
-    useEffect(() => {
-        const checkUser = async () => {
-            const user = await getUser(supabase)
-            if (user) {
-                router.refresh();
-                router.push("/");
-            }
-        }
-        checkUser();
-    });
 
     return (
         <Box maw={340} mx="auto">

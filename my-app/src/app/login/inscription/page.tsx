@@ -4,7 +4,7 @@ import {Button, NoticeMessage, NoticeMessageData, SectionContainer} from "tp-kit
 import {z} from 'zod';
 import {useForm, zodResolver} from '@mantine/form';
 import {PasswordInput, TextInput, Box, Group} from '@mantine/core';
-import Layout from "../Layout";
+import Layout from "../layout";
 import React, {useEffect, useState} from "react";
 import { createClient } from '@supabase/supabase-js'
 import {createClientComponentClient} from "@supabase/auth-helpers-nextjs";
@@ -76,16 +76,6 @@ const Inscription = () => {
         setIsValid((!error))
     }
 
-    useEffect(() => {
-        const checkUser = async () => {
-            const user = await getUser(supabase)
-            if (user) {
-                router.refresh();
-                router.push("/");
-            }
-        }
-        checkUser();
-    });
 
     return (
         <Layout>

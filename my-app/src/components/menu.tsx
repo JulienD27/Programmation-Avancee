@@ -39,7 +39,7 @@ const Menu: FC<Props> = memo(function () {
                             </Button>
                         </Link>
                     ) : (
-                        <Link href="/connexion"> {/* Redirigez vers la page de connexion si l'utilisateur n'est pas connecté */}
+                        <Link href="login/connexion"> {/* Redirigez vers la page de connexion si l'utilisateur n'est pas connecté */}
                             <Button variant="ghost" className="!rounded-full !p-0 h-[44px] w-[44px] flex justify-center items-center aspect-square relative text-3xl">
                                 <User size="18" weight="bold" />
                             </Button>

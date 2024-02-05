@@ -1,28 +1,17 @@
-'use client';
-
-import {useEffect, useState} from "react";
 import {getUser} from "../../utils/supabase";
-import {createClientComponentClient} from "@supabase/auth-helpers-nextjs";
+import {createClientComponentClient, createServerComponentClient} from "@supabase/auth-helpers-nextjs";
 import { Session } from "@supabase/gotrue-js/src/lib/types"
 import {Button, SectionContainer} from "tp-kit/components";
-import {useRouter} from "next/navigation";
+import {cookies} from "next/headers";
+import {redirect} from "next/navigation";
+import Logout from "../login/logout";
 
-export default function Page() {
-    const router = useRouter();
-    const [user, setUser] = useState<Session>();
-    const supabase = createClientComponentClient();
-
-    useEffect(() => {
-        getUser(supabase).then((user) => {
-            // @ts-ignore
-            if (user.session) {
-                // @ts-ignore
-                setUser(user.session)
-            } else {
-                router.push('/connexion')
-            }
-        })
-    }, []);
+export default async function Page() {
+    const supabase = createServerComponentClient({cookies});
+    const user = await getUser(supabase);
+    if (!user) {
+        redirect('login/connexion');
+    }
 
     return (
         <SectionContainer>
@@ -31,26 +20,18 @@ export default function Page() {
                     MON COMPTE
                 </p>
                 <p className="my-4">
-                    Bonjour, {user?.user.user_metadata.name} !
+                    Bonjour, {user.user_metadata.name} !
                 </p>
                 <div className="my-4">
                     <p>
-                        Nom : {user?.user.user_metadata.name}
+                        Nom : {user.user_metadata.name}
                     </p>
                     <p>
-                        Email : {user?.user.email}
+                        Email : {user.email}
                     </p>
                 </div>
-                <Button
-                    onClick={() => {
-                        supabase.auth.signOut().then(() => {
-                            router.refresh()
-                        })
-                    }}
-                    variant="outline" className="w-full mt-4"
-                >
-                    Se déconnecter
-                </Button>
+
+                <Logout />
             </div>
         </SectionContainer>
     )
