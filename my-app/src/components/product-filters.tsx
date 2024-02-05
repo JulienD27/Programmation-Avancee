@@ -20,7 +20,7 @@ const ProductFilters: FC<Props> = memo(function ({ categories, onChange }) {
   const form = useForm<ProductFiltersResult>({
     initialValues: {
       search: "",
-      categoriesSlugs: [],
+      categoriesSlug: [],
     },
   });
 
@@ -29,7 +29,7 @@ const ProductFilters: FC<Props> = memo(function ({ categories, onChange }) {
    */
   const handleSubmit = useCallback((values: ProductFiltersResult) => {
     onChange({
-      categoriesSlugs: values.categoriesSlugs,
+      categoriesSlug: values.categoriesSlug,
       search: values.search || undefined
     });
   }, [onChange]);

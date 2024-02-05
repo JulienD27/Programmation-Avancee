@@ -1,21 +1,32 @@
-import { ProductAttribute } from "@/types"
-import { ProductRating } from "tp-kit/components"
-import styles from '../app/product-attributes-table.module.css'
+import { FC, memo } from "react";
+import { ProductRating } from "tp-kit/components";
+import styles from './product-attributes-table.module.css';
+
+export type ProductAttribute = { label: string; rating: number };
 
 type Props = {
-    attributes : ProductAttribute[]
-}
+    data: Array<{ label: string; rating: number }>;
+    className?: string,
+};
 
-export default function ProductAttributeTable({attributes} : Props) {
+const ProductAttributesTable: FC<Props> = memo(function ({ data, className = ''}) {
     return (
-        <table className={styles.table}>
+        <table className={`${styles.table} ${className}`}>
             <tbody>
-            {attributes.map( (attribute,index) =><tr>
-                <td>{attribute.label}</td>
-                <td><ProductRating icon="circle" value={attribute.rating}/></td>
-            </tr>)}
+            {data.map((attr, i) => (
+                <tr key={i}>
+                    <td>{attr.label}</td>
+                    <td>
+                        <div className="w-full flex justify-end">
+                            <ProductRating value={attr.rating} icon="circle" />
+                        </div>
+                    </td>
+                </tr>
+            ))}
             </tbody>
-
         </table>
-    )
-}
+    );
+});
+
+ProductAttributesTable.displayName = "ProductAttributesTable";
+export { ProductAttributesTable };

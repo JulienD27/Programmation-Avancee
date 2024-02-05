@@ -13,7 +13,8 @@ type Props = {};
 
 const Menu: FC<Props> = memo(function () {
 
-    const [user, setUser] = useState(null);
+    // @ts-ignore
+    const [user, setUser] = useState<User | null>(null);
     const supabase = createClientComponentClient();
 
     useEffect(() => {

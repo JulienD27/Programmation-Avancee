@@ -29,7 +29,7 @@ const Connexion = () => {
         setNotices(n => [...n, {type: "success", message: "Connexion réussi"}]);
     }
 
-    function removeNotice(index) {
+    function removeNotice(index : number) {
         setNotices(n => {
             delete (n[index]);
             return Object.values(n);

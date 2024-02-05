@@ -16,8 +16,8 @@ export function filterProducts(
 
   // Excludes non-selected categories using their slug
   let output = categories.filter((cat) => {
-    return filters.categoriesSlugs.length ?? 0 > 0
-      ? filters.categoriesSlugs.includes(cat.slug)
+    return filters.categoriesSlug.length ?? 0 > 0
+      ? filters.categoriesSlug.includes(cat.slug)
       : true;
   });
 

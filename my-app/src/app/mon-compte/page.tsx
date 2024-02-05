@@ -1,52 +1,57 @@
-"use client";
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { Button, SectionContainer } from 'tp-kit/components';
-import { getUser } from '../../utils/supabase'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+'use client';
+
+import {useEffect, useState} from "react";
+import {getUser} from "../../utils/supabase";
+import {createClientComponentClient} from "@supabase/auth-helpers-nextjs";
+import { Session } from "@supabase/gotrue-js/src/lib/types"
+import {Button, SectionContainer} from "tp-kit/components";
+import {useRouter} from "next/navigation";
 
 export default function Page() {
     const router = useRouter();
+    const [user, setUser] = useState<Session>();
     const supabase = createClientComponentClient();
-    const [userDetails, setUserDetails] = useState(null);
 
     useEffect(() => {
-        async function fetchData() {
-            const user = await getUser(supabase);
-            if (!user) {
-                router.push('/connexion');
+        getUser(supabase).then((user) => {
+            // @ts-ignore
+            if (user.session) {
+                // @ts-ignore
+                setUser(user.session)
             } else {
-                setUserDetails(user);
-                console.log(user)
+                router.push('/connexion')
             }
-        }
-
-        fetchData();
+        })
     }, []);
-
-    const handleLogout = async () => {
-        await supabase.auth.signOut();
-        router.refresh();
-    };
 
     return (
         <SectionContainer>
-            <div className="bg-white rounded-lg p-6 shadow-lg">
-                <h2>MON COMPTE</h2>
-                {userDetails ? (
-                    <>
-                        <br></br>
-                        <p>Bonjour, {userDetails.user_metadata.name} !</p>
-                        <br></br>
-                        <p><span className="font-bold">Nom :</span> {userDetails.user_metadata.name}</p>
-                        <p><span className="font-bold">Email :</span> {userDetails.email}</p>
-                        <br></br>
-                    </>
-                ) : (
-                    <p>Chargement des détails de l'utilisateur...</p>
-                )}
-                <Button onClick={handleLogout}>Se déconnecter</Button>
+            <div className="bg-white rounded-lg p-4 shadow-lg">
+                <p className="text-2xl my-3">
+                    MON COMPTE
+                </p>
+                <p className="my-4">
+                    Bonjour, {user?.user.user_metadata.name} !
+                </p>
+                <div className="my-4">
+                    <p>
+                        Nom : {user?.user.user_metadata.name}
+                    </p>
+                    <p>
+                        Email : {user?.user.email}
+                    </p>
+                </div>
+                <Button
+                    onClick={() => {
+                        supabase.auth.signOut().then(() => {
+                            router.refresh()
+                        })
+                    }}
+                    variant="outline" className="w-full mt-4"
+                >
+                    Se déconnecter
+                </Button>
             </div>
         </SectionContainer>
-    );
-};
+    )
+}

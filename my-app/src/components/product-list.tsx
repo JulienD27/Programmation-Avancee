@@ -33,7 +33,7 @@ const ProductList: FC<Props> = memo(function ({ categories, showFilters = false 
     // Build URL query
     const query = new URLSearchParams();
     if (filters?.search) query.set('search', filters.search);
-    filters?.categoriesSlugs.forEach(slug => query.append('cat', slug));
+    filters?.categoriesSlug.forEach(slug => query.append('cat', slug));
 
     // Call the filter API and applies the result
     fetch(`/api/product-filters?${query}`)

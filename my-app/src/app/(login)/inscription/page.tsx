@@ -33,7 +33,7 @@ const Inscription = () => {
         setNotices(n => [...n, {type: "success", message: "Inscription réussi"}]);
     }
 
-    function removeNotice(index) {
+    function removeNotice(index : number) {
         setNotices(n => {
             delete (n[index]);
             return Object.values(n);
@@ -120,9 +120,9 @@ const Inscription = () => {
                     />
                     <div>
                         <Button type="submit" fullWidth>
-                            S'inscrire
+                            S&apos;inscrire
                         </Button>
-                        <Button variant={"outline"} fullWidth variant="ghost"
+                        <Button variant={"outline"} fullWidth
                                 onClick={() => {
                                     router.push("/connexion");
                                 }}>

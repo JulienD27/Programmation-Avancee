@@ -40,7 +40,7 @@ const Cart: FC<Props> = memo(function () {
             </div>
         );
 
-    function removeNotice(index) {
+    function removeNotice(index : number) {
         setNotices(n => {
             delete (n[index]);
             return Object.values(n);

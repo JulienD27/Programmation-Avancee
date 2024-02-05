@@ -4,7 +4,7 @@ import prisma from "../../../utils/prisma";
 
 export async function GET(request:NextRequest) {
   const params : ProductFiltersResult = {
-    categoriesSlugs: request.nextUrl.searchParams.getAll('cat'),
+    categoriesSlug: request.nextUrl.searchParams.getAll('cat'),
     search: request.nextUrl.searchParams.get('search') ?? undefined
   };
 
@@ -16,15 +16,15 @@ export async function GET(request:NextRequest) {
           name: {
             contains: params.search,
             // Ignore the case
-            mode: "insensitive" 
+            mode: "insensitive"
           },
         },
       } : true
     },
     // Filters on categories slugs
-    where: params.categoriesSlugs ? {
+    where: params.categoriesSlug ? {
       slug: {
-        in: params.categoriesSlugs
+        in: params.categoriesSlug
       }
     } : undefined
   })
